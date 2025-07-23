@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Social Media</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #025247;
+      --secondary: #37c9a7;
+      --accent: #48efec;
+      --dark: #2d3338;
+      --light: #f8f9fa;
+      --success: #4cf0cf;
+      --danger: #f72585;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f0f2f5;
+      color: var(--dark);
+      min-height: 100vh;
+    }
+    
+    .container {
+      display: flex;
+      min-height: 100vh;
+      max-width: 1400px;
+      margin: 0 auto;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    
+    /* Sidebar améliorée */
+    .sidebar {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      width: 280px;
+      padding: 25px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      color: white;
+      position: relative;
+      z-index: 10;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      padding: 0 10px;
+      margin-bottom: 20px;
+    }
+    
+    .logo i {
+      color: var(--success);
+    }
+    
+    .profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+
+    
+    .profile-pic {
+      width: 90px;
+      height: 90px;
+      background: linear-gradient(45deg, var(--accent), var(--success));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: white;
+      border: 3px solid white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    
+    .profile-info {
+      text-align: center;
+    }
+    
+    .profile-info h3 {
+      margin-bottom: 5px;
+    }
+    
+    .profile-info p {
+      color: rgba(255,255,255,0.8);
+      font-size: 0.9rem;
+    }
+    
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .stat {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .stat-value {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    
+    .stat-label {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+    
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 15px;
+      border-radius: 8px;
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link:hover {
+      background-color: rgba(255,255,255,0.1);
+      transform: translateX(5px);
+    }
+    
+    .nav-link.active {
+      background-color: rgba(255,255,255,0.2);
+      font-weight: bold;
+    }
+    
+    .nav-link i {
+      width: 24px;
+      text-align: center;
+    }
+    
+    .btn {
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .btn-primary {
+      background-color: var(--success);
+      color: white;
+    }
+    
+    /* Main content */
+    .main {
+      flex-grow: 1;
+      background-color: var(--light);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      overflow-y: auto;
+    }
+    
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--light-gray);
+    }
+    
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background-color: white;
+      border-radius: 30px;
+      padding: 8px 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      width: 300px;
+    }
+    
+    .search-bar i {
+      color: var(--gray);
+      margin-right: 10px;
+    }
+    
+    .search-bar input {
+      border: none;
+      outline: none;
+      width: 100%;
+      background: transparent;
+    }
+    
+    .top-nav {
+      display: flex;
+      gap: 25px;
+    }
+    
+    .top-nav-item {
+      position: relative;
+      cursor: pointer;
+      padding: 8px 0;
+      font-weight: 500;
+    }
+    
+    .top-nav-item.active {
+      color: var(--primary);
+      font-weight: bold;
+    }
+    
+    .top-nav-item.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: var(--primary);
+      border-radius: 3px;
+    }
+    
+    .notification {
+      position: relative;
+    }
+    
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -10px;
+      background-color: var(--danger);
+      color: white;
+      font-size: 0.7rem;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Post card */
+    .post-card {
+      background-color: white;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+    
+    .post-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .post-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .user-pic {
+      width: 45px;
+      height: 45px;
+      background: linear-gradient(45deg, var(--accent), var(--success));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    
+    .user-info h4 {
+      margin-bottom: 3px;
+    }
+    
+    .user-info span {
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+    
+    .follow-btn {
+      border: none;
+      background: var(--primary);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .follow-btn:hover {
+      background: var(--secondary);
+    }
+    
+    .follow-btn.following {
+      background: var(--light-gray);
+      color: var(--dark);
+    }
+    
+    .post-content {
+      padding: 15px 0;
+      line-height: 1.6;
+    }
+    
+    .post-content p {
+      margin-bottom: 15px;
+    }
+    
+    .post-image {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      max-height: 400px;
+      object-fit: cover;
+    }
+    
+    .post-stats {
+      display: flex;
+      justify-content: space-between;
+      color: var(--gray);
+      font-size: 0.9rem;
+      padding: 10px 0;
+      border-top: 1px solid var(--light-gray);
+      border-bottom: 1px solid var(--light-gray);
+      margin-bottom: 15px;
+    }
+    
+    .actions {
+      display: flex;
+      justify-content: space-around;
+    }
+    
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--gray);
+      font-weight: 500;
+    }
+    
+    .action-btn:hover {
+      background-color: var(--light-gray);
+      color: var(--primary);
+    }
+    
+    .action-btn.liked {
+      color: var(--danger);
+    }
+    
+    /* Comment section */
+    .comment-section {
+      margin-top: 20px;
+      border-top: 1px solid var(--light-gray);
+      padding-top: 20px;
+    }
+    
+    .comment {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+    
+    .comment:last-child {
+      margin-bottom: 0;
+    }
+    
+    .comment-pic {
+      width: 35px;
+      height: 35px;
+      background: linear-gradient(45deg, var(--accent), var(--success));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    
+    .comment-content {
+      background-color: var(--light-gray);
+      padding: 12px;
+      border-radius: 18px;
+      flex-grow: 1;
+    }
+    
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    
+    .comment-header h5 {
+      font-size: 0.95rem;
+    }
+    
+    .comment-header span {
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+    
+    .comment-text {
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    
+    .comment-input {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .comment-input input {
+      flex-grow: 1;
+      padding: 12px 15px;
+      border: 1px solid var(--light-gray);
+      border-radius: 30px;
+      outline: none;
+    }
+    
+    .comment-input button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 0 20px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .comment-input button:hover {
+      background-color: var(--secondary);
+    }
+    
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-content {
+      background-color: white;
+      border-radius: 15px;
+      width: 500px;
+      max-width: 90%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      animation: modalFade 0.3s ease;
+    }
+    
+    @keyframes modalFade {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid var(--light-gray);
+    }
+    
+    .modal-header h3 {
+      margin: 0;
+    }
+    
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--gray);
+    }
+    
+    .modal-body {
+      padding: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--dark);
+    }
+    
+    .form-group textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 12px;
+      border: 1px solid var(--light-gray);
+      border-radius: 12px;
+      resize: vertical;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(72, 239, 236, 0.2);
+    }
+    
+    .form-group input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--light-gray);
+      border-radius: 12px;
+      margin-top: 10px;
+      background-color: white;
+      cursor: pointer;
+    }
+    
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      padding: 20px;
+      border-top: 1px solid var(--light-gray);
+      gap: 10px;
+    }
+    
+    .btn-secondary {
+      background-color: var(--light-gray);
+      color: var(--dark);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #dcdcdc;
+    }
+    
+    /* Responsive */
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+      }
+      
+      .sidebar {
+        width: 100%;
+        padding: 15px;
+      }
+      
+      .nav-links {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .nav-link {
+        padding: 10px 15px;
+      }
+      
+      .profile {
+        flex-direction: row;
+        justify-content: center;
+        text-align: left;
+      }
+      
+      .profile-info {
+        text-align: left;
+      }
+      
+      .search-bar {
+        width: 200px;
+      }
+    }
+    
+    @media (max-width: 600px) {
+      .top-bar {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .search-bar {
+        width: 100%;
+      }
+      
+      .top-nav {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo"><i class="fas fa-users"></i><span>BeClosen</span></div>
+      <div class="profile">
+        <div class="profile-pic" id="profile-pic">IM</div>
+        <div class="profile-info">
+          <h3 id="profile-name">Imen</h3>
+          <p id="profile-username">Im@n</p>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value" id="followers-count">1</div>
+          <div class="stat-label">Followers</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="following-count">1</div>
+          <div class="stat-label">Following</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="posts-count">2</div>
+          <div class="stat-label">Posts</div>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="#" class="nav-link active"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="profile.html" class="nav-link"><i class="fas fa-user"></i><span>Profil</span></a>
+        <a href="#" class="nav-link"><i class="fas fa-bell"></i><span>Notifications</span></a>
+        <a href="#" class="nav-link"><i class="fas fa-cog"></i><span>Settings</span></a>
+      </div>
+      <button class="btn btn-primary" id="newPostBtn"><i class="fas fa-plus"></i><span>New Post</span></button>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+      <div class="top-bar">
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Rechercher..." id="searchInput" />
+        </div>
+        <div class="top-nav">
+          <div class="top-nav-item active">Home</div>
+          <div class="top-nav-item">Trending</div>
+          <div class="top-nav-item notification">
+            Notifications
+            <div class="notification-badge" id="notificationBadge">5</div>
+          </div>
+          <div class="top-nav-item">Messages</div>
+        </div>
+      </div>
+
+      <!-- Container posts dynamiques -->
+      <div id="postsContainer"></div>
+    </div>
+  </div>
+
+  <!-- Modal création post - Modifié pour correspondre au style -->
+  <div class="modal" id="postModal" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Créer un nouveau post</h3>
+        <button class="close-btn">&times;</button>
+      </div>
+      <form id="postForm" enctype="multipart/form-data">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="postContent">Quoi de neuf ?</label>
+            <textarea id="postContent" name="content" placeholder="Exprime-toi..." required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="postImage">Ajouter une image</label>
+            <input type="file" id="postImage" name="image" accept="image/*" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelPostBtn">Annuler</button>
+          <button type="submit" class="btn btn-primary">Publier</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+  const backendURL = 'http://localhost:5000';
+  const token = localStorage.getItem('token');
+  const currentUserId = localStorage.getItem('userId');
+  const followingUserIds = [];
+
+  // Gestion modal post
+  const newPostBtn = document.getElementById('newPostBtn');
+  const postModal = document.getElementById('postModal');
+  const closeBtn = postModal.querySelector('.close-btn');
+  const cancelPostBtn = document.getElementById('cancelPostBtn');
+
+  newPostBtn.addEventListener('click', () => {
+    if (!token) {
+      alert("Tu dois être connecté pour accéder au réseau social.");
+      return;
+    }
+    postModal.style.display = 'flex';
+  });
+
+  closeBtn.addEventListener('click', () => {
+    postModal.style.display = 'none';
+  });
+
+  cancelPostBtn.addEventListener('click', () => {
+    postModal.style.display = 'none';
+  });
+
+  window.addEventListener('click', (e) => {
+    if (e.target === postModal) {
+      postModal.style.display = 'none';
+    }
+  });
+
+  // Envoi nouveau post
+  document.getElementById('postForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!token) {
+      alert("Tu dois être connecté pour poster.");
+      return;
+    }
+
+    const content = document.getElementById('postContent').value.trim();
+    const imageFile = document.getElementById('postImage').files[0];
+
+    if (!content) {
+      alert("Le contenu ne peut pas être vide.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('content', content);
+    if (imageFile) formData.append('image', imageFile);
+    try {
+      const res = await fetch(`${backendURL}/api/posts`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+
+      if (res.ok) {
+        alert('Post publié !');
+        document.getElementById('postContent').value = '';
+        document.getElementById('postImage').value = '';
+        postModal.style.display = 'none';
+        loadPosts();
+      } else {
+        const data = await res.json();
+        alert('Erreur : ' + (data.message || 'Impossible de publier'));
+      }
+    } catch (err) {
+      alert('Erreur réseau');
+      console.error(err);
+    }
+  });
+
+  // Chargement et affichage des posts
+  async function loadPosts() {
+    if (!token) {
+      document.getElementById('postsContainer').innerHTML = '<p>Connectez-vous pour voir les posts.</p>';
+      return;
+    }
+
+    try {
+      const res = await fetch(`${backendURL}/api/posts`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) throw new Error('Erreur chargement posts');
+
+      const posts = await res.json();
+      console.log('Posts reçus:', posts);
+
+      const container = document.getElementById('postsContainer');
+      container.innerHTML = '';
+
+      posts.reverse().forEach(post => {
+
+        console.log(`${backendURL}/${post.imageUrl}`); 
+
+        const author = post.author || {};
+        const username = author.username || 'Utilisateur inconnu';
+        const authorId = author._id || '';
+        const userInitials = username.slice(0, 2).toUpperCase();
+        const likedByUser = post.likes?.includes(currentUserId);
+        const isFollowing = followingUserIds.includes(authorId);
+
+        const postDiv = document.createElement('div');
+        postDiv.classList.add('post-card');
+        postDiv.innerHTML = `
+          <div class="post-header">
+            <div class="post-user">
+              <div class="user-pic">${userInitials}</div>
+              <div class="user-info">
+                <h4>${username}</h4>
+                <span>${new Date(post.createdAt).toLocaleString()}</span>
+              </div>
+            </div>
+            <button class="follow-btn ${isFollowing ? 'following' : ''}" data-userid="${authorId}">
+              ${isFollowing ? 'Following' : 'Follow'}
+            </button>
+          </div>
+
+          <div class="post-content">
+            <p>${post.content}</p>
+            ${post.imageUrl ? `<img src="${post.imageUrl}" alt="Image post" class="post-image" />` : ''}
+          </div>
+
+          <div class="post-stats">
+            <span>${post.likes.length} Likes</span>
+            <span>${post.comments.length} Comments</span>
+          </div>
+
+          <div class="actions">
+            <button class="action-btn like-btn ${likedByUser ? 'liked' : ''}" data-postid="${post._id}">
+              <i class="${likedByUser ? 'fas' : 'far'} fa-heart"></i>
+              <span>Like</span>
+            </button>
+            <button class="action-btn comment-btn" data-postid="${post._id}">
+              <i class="far fa-comment"></i>
+              <span>Comment</span>
+            </button>
+          </div>
+
+          <div class="comment-section" data-postid="${post._id}" style="display:none;">
+            ${post.comments.map(c => {
+              const commentAuthor = c.author || {};
+              const commentUsername = commentAuthor.username || 'Anonyme';
+              const commentInitials = commentUsername.slice(0, 2).toUpperCase();
+              return `
+                <div class="comment">
+                  <div class="comment-pic">${commentInitials}</div>
+                  <div class="comment-content">
+                    <div class="comment-header">
+                      <h5>${commentUsername}</h5>
+                      <span>${new Date(c.createdAt).toLocaleString()}</span>
+                    </div>
+                    <div class="comment-text">${c.text}</div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+
+            <div class="comment-input">
+              <input type="text" data-postid="${post._id}" placeholder="Ajouter un commentaire..." data-postid="${post._id}" />
+              <button class="send-comment-btn" data-postid="${post._id}"><i class="fas fa-paper-plane"></i></button>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(postDiv);
+      });
+
+      addPostListeners();
+    } catch (err) {
+      console.error(err);
+      document.getElementById('postsContainer').innerHTML = '<p>Erreur lors du chargement des posts.</p>';
+    }
+  }
+
+  // Ajout des listeners pour like, follow, commentaires
+  function addPostListeners() {
+    // Like buttons
+    document.querySelectorAll('.like-btn').forEach(btn => {
+      btn.onclick = async () => {
+        const postId = btn.dataset.postid;
+        try {
+          const res = await fetch(`${backendURL}/api/posts/like/${postId}`, {
+            method: 'PUT',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+          if (!res.ok) throw new Error('Erreur like');
+          loadPosts();
+        } catch (err) {
+          console.error('Erreur lors du like :', err);
+        }
+      };
+    });
+
+    // Follow buttons
+    document.querySelectorAll('.follow-btn').forEach(btn => {
+      btn.onclick = async () => {
+        const userId = btn.dataset.userid;
+        console.log('userId:', userId);
+        const isFollowing = btn.classList.contains('following');
+
+        try {
+          const url = `${backendURL}/api/users/${userId}/${isFollowing ? 'unfollow' : 'follow'}`;
+          const res = await fetch(url, {
+            method: 'PUT',
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+
+          if (!res.ok) {
+            const error = await res.json();
+            console.error('Erreur API :', error.message);
+            return;
+          }
+
+          btn.classList.toggle('following');
+          btn.textContent = isFollowing ? 'Follow' : 'Following';
+
+        } catch (err) {
+          console.error('Erreur lors du follow :', err);
+        }
+      };
+    });
+
+    // Toggle affichage zone commentaire
+    document.querySelectorAll('.comment-btn').forEach(btn => {
+      btn.onclick = () => {
+        const postId = btn.dataset.postid;
+        const commentSection = document.querySelector(`.comment-section[data-postid="${postId}"]`);
+        if (commentSection) {
+          commentSection.style.display = commentSection.style.display === 'none' ? 'block' : 'none';
+          if (commentSection.style.display === 'block') {
+            const input = commentSection.querySelector('input[data-postid]');
+            if (input) input.focus();
+          }
+        }
+      };
+    });
+
+    // Boutons envoyer commentaire
+    document.querySelectorAll('.send-comment-btn').forEach(btn => {
+      btn.onclick = async () => {
+        const postId = btn.dataset.postid;
+        const input = document.querySelector(`.comment-input input[data-postid="${postId}"]`);
+        const text = input.value.trim();
+        if (!text) return;
+
+        try {
+          const res = await fetch(`${backendURL}/api/posts/comment/${postId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ text }),
+          });
+          if (res.ok) {
+            input.value = '';
+            loadPosts();
+          } else {
+            throw new Error('Erreur commentaire');
+          }
+        } catch (err) {
+          console.error('Erreur lors de l\'ajout du commentaire :', err);
+        }
+      };
+    });
+
+    // Envoi commentaire au clavier (enter)
+    document.querySelectorAll('.comment-input input').forEach(input => {
+      input.onkeypress = (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          input.nextElementSibling.click();
+        }
+      };
+    });
+  }
+
+  // Chargement initial au chargement de la page
+  window.addEventListener('DOMContentLoaded', () => {
+    loadPosts();
+  });
+
+  document.addEventListener('click', async (e) => {
+    // FOLLOW button
+    if (e.target.classList.contains('follow-btn')) {
+      const btn = e.target;
+      const userId = btn.dataset.userid;
+      const isFollowing = btn.classList.contains('following');
+      const currentUserId = localStorage.getItem('userId');
+      try {
+        const url = `${backendURL}/api/users/${userId}/${isFollowing ? 'unfollow' : 'follow'}`;
+        const res = await fetch(url, {
+          method: 'PUT',
+          headers :{
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({ currentUserId }), 
+        });
+
+        if (res.ok) {
+          btn.classList.toggle('following');
+          btn.textContent = isFollowing ? 'Follow' : 'Following';
+        }
+      } catch (err) {
+        console.error('Erreur follow/unfollow:', err);
+      }
+    }
+  });
+  </script>
+</body>
+</html>
